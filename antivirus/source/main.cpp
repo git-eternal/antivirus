@@ -4,7 +4,7 @@
 
 int main(void)
 {
-  scanner->ScanFile("ttt.exe");
+  Scanner::GetInstance().ScanFile("ttt.exe");
 
   std::cin.get();
 }

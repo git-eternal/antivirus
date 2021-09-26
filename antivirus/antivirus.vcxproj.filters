@@ -32,7 +32,7 @@
     <ClInclude Include="source\globals.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\database\singleton.hpp">
+    <ClInclude Include="source\scanner\singleton.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="source\scanner\scanner.hpp">
