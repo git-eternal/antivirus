@@ -15,6 +15,11 @@ void Signatures::Download()
 
 	std::string downloadPath{ Constants::signatureDatabasePath + "\\signatures.zip" };
 
+	// Create our signature database directory
+	//
+	if (fs::create_directory(databasePath))
+		fmt::print("Storing signature database in: {}", databasePath.string());
+
 	// Download our signatures
 	//
 	HRESULT result = URLDownloadToFile(
@@ -30,8 +35,5 @@ void Signatures::Download()
 		return;
 	}
 
-	// Create our signature database directory
-	//
-	if (fs::create_directory(databasePath))
-		fmt::print("Storing signature database in: {}", databasePath.string());
+	// Unzip the signatures
 }
