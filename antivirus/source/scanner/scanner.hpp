@@ -27,6 +27,8 @@ private:
   std::vector<fs::path> mMaliciousFiles{};
   std::vector<std::string> mVulnerableDrivers{};
 
+  unsigned int mFilesScanned{};
+
 public:
   void ScanSystem();
   bool IsExecutableFile(const std::string& path);

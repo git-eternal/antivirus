@@ -26,6 +26,8 @@ path_t Scanner::GetFiles(const fs::path& path)
 	{
 		std::string file = root.path().string();
 
+		++mFilesScanned;
+
 		// Check if the file is a valid executable
 		//
 		if (!IsExecutableFile(file))
@@ -46,7 +48,7 @@ void Scanner::ScanSystem()
 		fmt::print("file path: {}\n", file);
 	}
 
-	fmt::print("\nGrabbed {} valid PE files\n", files.size());
+	fmt::print("\n{}/{} were valid PE files\n", files.size(), mFilesScanned);
 }
 
 bool Scanner::IsExecutableFile(const std::string& path)
