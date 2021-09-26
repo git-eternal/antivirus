@@ -21,12 +21,21 @@
     <ClCompile Include="source\database\signatures.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\scanner\scanner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\database\signatures.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="source\globals.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\database\singleton.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\scanner\scanner.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -13,10 +13,14 @@ void Signatures::Download()
 
 	// Download our signatures
 	//
-	while (true)
-	{
-		std::cout << Constants::signatureDatabaseUrl << '\n';
 
-		Sleep(1000);
-	}
+	const fs::path databasePath{ "C:\\Signatures" };
+
+	// Create our signature database directory
+	//
+	if (fs::create_directory(databasePath))
+		fmt::print("storing signature database in: {}", 
+								databasePath.string());
+
+
 }

@@ -1,17 +1,10 @@
-#include "globals.hpp"
+﻿#include "globals.hpp"
 #include "database/signatures.hpp"
-
-class Scanner
-{
-public:
-	void ScanSystem();
-	void ScanFile(const fs::path& filePath);
-};
+#include "scanner/scanner.hpp"
 
 int main(void)
 {
-	Signatures s;
-	Signatures t;
+  scanner->ScanFile("ttt.exe");
 
-	std::cin.get();
+  std::cin.get();
 }

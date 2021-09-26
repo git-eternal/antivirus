@@ -8,6 +8,8 @@
 #include <string_view>
 #include <functional>
 #include <iostream>
+#include <array>
+#include <fmt/core.h>
 
 namespace fs = std::filesystem;
 
