@@ -2,13 +2,8 @@
 
 #include "../globals.hpp"
 
-#include <cstdio>
-#include <iostream>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <array>
-
+#include <urlmon.h>
+#pragma comment(lib, "urlmon.lib")
 
 /*
 1. create a way to download all our yara files (maybe an update signatures button too)

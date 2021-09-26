@@ -11,16 +11,27 @@ void Signatures::Download()
 {
 	const std::lock_guard<std::mutex> lock(mMutex);
 
+	const fs::path databasePath{ Constants::signatureDatabasePath };
+
+	std::string downloadPath{ Constants::signatureDatabasePath + "\\signatures.zip" };
+
 	// Download our signatures
 	//
+	HRESULT result = URLDownloadToFile(
+		NULL,
+		Constants::signatureDatabaseUrl.c_str(),
+		downloadPath.c_str(),
+		0, 
+		NULL);
 
-	const fs::path databasePath{ "C:\\Signatures" };
+	if (!SUCCEEDED(result))
+	{
+		fmt::print("Error downloading signatures: {}", GetLastError());
+		return;
+	}
 
 	// Create our signature database directory
 	//
 	if (fs::create_directory(databasePath))
-		fmt::print("storing signature database in: {}", 
-								databasePath.string());
-
-
+		fmt::print("Storing signature database in: {}", databasePath.string());
 }

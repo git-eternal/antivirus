@@ -15,5 +15,6 @@ namespace fs = std::filesystem;
 
 namespace Constants
 {
-	const std::string_view signatureDatabaseUrl{ "url" };
+	const std::string signatureDatabaseUrl{ "https://github.com/Yara-Rules/rules/archive/refs/heads/master.zip" };
+	const std::string signatureDatabasePath{ "C:\\Signatures" };
 }
