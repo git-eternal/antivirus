@@ -5,6 +5,7 @@
 int main(void)
 {
   Signatures t;
+  Scanner::GetInstance().ScanDrivers();
   //Scanner::GetInstance().ScanFile("ttt.exe");
 
   std::cin.get();

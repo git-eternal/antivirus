@@ -10,6 +10,8 @@
 #include <iostream>
 #include <array>
 #include <fmt/core.h>
+#include <algorithm>
+#include <execution>
 
 namespace fs = std::filesystem;
 
