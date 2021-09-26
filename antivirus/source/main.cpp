@@ -4,9 +4,13 @@
 
 int main(void)
 {
-  Signatures t;
-  // Scanner::GetInstance().ScanDrivers();
-  //Scanner::GetInstance().ScanFile("ttt.exe");
+  Signatures signatures{};
 
-  std::cin.get();
+  Scanner::GetInstance().ScanFile("yara32.exe");
+  Scanner::GetInstance().ScanFile("ttt.exe");
+  Scanner::GetInstance().ScanFile("ttt.exe");
+
+  Scanner::GetInstance().ShowReport();
+  
+  return std::cin.get();
 }

@@ -1,5 +1,25 @@
 #include "scanner.hpp"
 
+void Scanner::ShowReport()
+{
+	if (mMaliciousFiles.empty())
+	{
+		fmt::print("No malicious files found.\n");
+		return;
+	}
+	
+	fmt::print("Malicious file(s) detected:\n");
+
+	for (const auto& malware : mMaliciousFiles)
+		fmt::print("Path: {}\n", malware.string());
+}
+
+void Scanner::ScanSystem()
+{
+	// TODO: Add directory iterator
+	//
+}
+
 void Scanner::ScanFile(const fs::path& filePath)
 {
 	if (!fs::exists(filePath))
@@ -10,9 +30,9 @@ void Scanner::ScanFile(const fs::path& filePath)
 	unsigned int scanResult = ExecuteYara("yara32.exe -c rule.yar " + filePath.string());
 
 	if (scanResult >= 1)
-		std::cout << "malicious\n";
-	else
-		std::cout << "not malicious\n";
+	{
+		mMaliciousFiles.emplace_back(filePath);
+	}	
 }
 
 unsigned int Scanner::ExecuteYara(const std::string& command)
@@ -37,6 +57,8 @@ unsigned int Scanner::ExecuteYara(const std::string& command)
 
 void Scanner::ScanDrivers()
 {
+	const std::lock_guard<std::mutex> lock(mMutex);
+
 	std::for_each(std::execution::par_unseq, 
 		Constants::vulnerableDrivers.begin(),
 		Constants::vulnerableDrivers.end(), [&](auto& driver) -> void
