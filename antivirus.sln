@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31702.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "antivirus", "antivirus\antivirus.vcxproj", "{2B51C8FD-7970-45A7-A423-C8D45461B90D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2B51C8FD-7970-45A7-A423-C8D45461B90D}.Debug|x64.ActiveCfg = Debug|x64
+		{2B51C8FD-7970-45A7-A423-C8D45461B90D}.Debug|x64.Build.0 = Debug|x64
+		{2B51C8FD-7970-45A7-A423-C8D45461B90D}.Debug|x86.ActiveCfg = Debug|Win32
+		{2B51C8FD-7970-45A7-A423-C8D45461B90D}.Debug|x86.Build.0 = Debug|Win32
+		{2B51C8FD-7970-45A7-A423-C8D45461B90D}.Release|x64.ActiveCfg = Release|x64
+		{2B51C8FD-7970-45A7-A423-C8D45461B90D}.Release|x64.Build.0 = Release|x64
+		{2B51C8FD-7970-45A7-A423-C8D45461B90D}.Release|x86.ActiveCfg = Release|Win32
+		{2B51C8FD-7970-45A7-A423-C8D45461B90D}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E9BE6166-D545-4C33-96A8-3B6C506253F0}
+	EndGlobalSection
+EndGlobal
