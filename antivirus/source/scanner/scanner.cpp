@@ -37,8 +37,9 @@ unsigned int Scanner::ExecuteYara(const std::string& command)
 
 void Scanner::ScanDrivers()
 {
-	std::for_each(std::execution::par_unseq, mDriverList.begin(),
-		mDriverList.end(), [&](auto& driver) -> void
+	std::for_each(std::execution::par_unseq, 
+		Constants::vulnerableDrivers.begin(),
+		Constants::vulnerableDrivers.end(), [&](auto& driver) -> void
 	{
 		std::string driverPath{ "\\\\.\\" + driver };
 
