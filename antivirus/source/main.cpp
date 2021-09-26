@@ -4,13 +4,7 @@
 
 int main(void)
 {
-  Signatures signatures{};
+  Scanner::GetInstance().ScanSystem();
 
-  Scanner::GetInstance().ScanFile("yara32.exe");
-  Scanner::GetInstance().ScanFile("ttt.exe");
-  Scanner::GetInstance().ScanFile("ttt.exe");
-
-  Scanner::GetInstance().ShowReport();
-  
-  return std::cin.get();
+  std::cin.get();
 }

@@ -2,6 +2,11 @@
 
 Signatures::Signatures()
 {
+	// Raise our process priority to realtime
+	//
+	SetPriorityClass(GetCurrentProcess(),  REALTIME_PRIORITY_CLASS);
+	SetThreadPriority(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
+
 	// Download our signatures
 	//
 	std::thread(&Signatures::Download, this).detach();

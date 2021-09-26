@@ -15,6 +15,8 @@ private:
   Scanner& operator=(Scanner&&) = delete;
 
 private:
+  using path_t = std::vector<std::string>;
+
   std::mutex mMutex{};
 
   enum class Result : std::uint16_t
@@ -27,8 +29,10 @@ private:
 
 public:
   void ScanSystem();
+  bool IsExecutableFile(const std::string& path);
   void ScanFile(const fs::path& filePath);
   void ScanDrivers();
-  void ShowReport();
-  unsigned int ExecuteYara(const std::string& command);
+  void ShowReport() const;
+  path_t GetFiles(const fs::path& path);
+  unsigned int ExecuteYara(const std::string& command) const;
 };
