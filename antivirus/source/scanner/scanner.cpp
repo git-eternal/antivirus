@@ -1,6 +1,6 @@
 #include "scanner.hpp"
 
-void Scanner::ShowReport() const
+void Scanner::Report() const
 {
 	if (mMaliciousFiles.empty())
 	{
@@ -14,92 +14,143 @@ void Scanner::ShowReport() const
 		fmt::print("Path: {}\n", malware.string());
 }
 
+bool Scanner::IsPeFile(const std::string_view& path) 
+{
+	if (path.find(".msi") != std::string::npos)
+		return true;
+
+	std::ifstream file(path, std::ios::binary | std::ios::ate);
+
+	if (!file)
+		return false;
+
+	auto size = file.tellg();
+
+	if (size == -1)
+		return false;
+
+	std::unique_ptr<char[]> buffer(new char[size]);
+
+	file.seekg(0, std::ios::beg);
+	file.read(buffer.get(), size);
+	file.close();
+
+	auto res = buffer ? reinterpret_cast<PIMAGE_DOS_HEADER>(buffer.get())
+		->e_magic == IMAGE_DOS_SIGNATURE : false;
+
+	return res;
+}
+
 using path_t = std::vector<std::string>;
 
-path_t Scanner::GetFiles(const fs::path& path)
+path_t Scanner::GetAllFiles(const std::string& path)
 {
-	path_t filePaths{};
+	path_t fileNames{};
 
 	// Make sure we recursively iterate here
 	//
-	for (const auto& root : fs::recursive_directory_iterator(path))
+	for (const auto& file : fs::recursive_directory_iterator(path))
 	{
-		std::string file = root.path().string();
+		if (fs::is_regular_file(file))
+		{
+			++mFilesScanned;
 
-		++mFilesScanned;
+			std::string path{ file.path().string() };
 
-		// Check if the file is a valid executable
-		//
-		if (!IsExecutableFile(file))
-			continue;
+			// Check if the file is a valid executable
+			//
+			if (!IsPeFile(path))
+				continue;
 
-		filePaths.emplace_back(file);
+			fileNames.push_back(path);
+		}
 	}
 
-	return filePaths;
+	return fileNames;
 }
 
+// TODO: Add a cache for files that were already scanned and skip them on next scan?
+//
 void Scanner::ScanSystem()
 {	
-	path_t files{ GetFiles("C:\\Users") };
+	Timer t{};
 
-	for (const auto& file : files)
-	{
-		fmt::print("file path: {}\n", file);
-	}
+	const path_t files = GetAllFiles("C:/Users");
+
+	//std::for_each(std::execution::par_unseq, files.begin(),
+	//	files.end(), [](const auto& file)
+	//	{ 
+	//		fmt::print("path: {}\n", file);
+	//	});
 
 	fmt::print("\n{}/{} were valid PE files\n", files.size(), mFilesScanned);
+
+	fmt::print("Time elapsed: {}\n", t.elapsed());
 }
 
-bool Scanner::IsExecutableFile(const std::string& path)
+void Scanner::QuarantineFile(const fs::path& path)
 {
-	HANDLE hMapObject{};
-	HANDLE hFile{};
-	LPVOID lpBase{};
-	PIMAGE_DOS_HEADER dosHeader{};
-
-	// Open the (hopefully) executable file
+	// Put it in C:\Antivirus\Quarantine
 	//
-	hFile = CreateFile(
-		path.c_str(),
-		GENERIC_READ,
-		FILE_SHARE_READ,
-		NULL,
-		OPEN_EXISTING,
-		FILE_ATTRIBUTE_NORMAL,
-		NULL);
 
-	if (hFile == INVALID_HANDLE_VALUE)
-	{
-		//fmt::print("Error: Could not open file\n");
-		return false;
-	}
-
-	// Map our executable to memory
+	// Remove file extension and give (random) file name?
 	//
-	hMapObject = CreateFileMapping(
-		hFile,
-		NULL,
-		PAGE_READONLY,
-		0, 0, NULL);
-
-	// Get the base address of executable
-	//
-	lpBase = MapViewOfFile(
-		hMapObject,
-		FILE_MAP_READ,
-		0, 0, 0);
-
-	if (!lpBase) return false;
-
-	// Get the base address of our DOS Header
-	//
-	dosHeader = (PIMAGE_DOS_HEADER)lpBase;
-
-	// Check for valid MZ Signature (0x54AD)
-	//
-	return(dosHeader->e_magic == IMAGE_DOS_SIGNATURE);
 }
+
+//
+//bool Scanner::IsExecutableFile(const std::string& path)
+//{
+//	HANDLE hMapObject{};
+//	HANDLE hFile{};
+//	LPVOID lpBase{};
+//	PIMAGE_DOS_HEADER dosHeader{};
+//
+//	// Open the (hopefully) executable file
+//	//
+//	hFile = CreateFile(
+//		path.c_str(),
+//		GENERIC_READ,
+//		FILE_SHARE_READ,
+//		NULL,
+//		OPEN_EXISTING,
+//		FILE_ATTRIBUTE_NORMAL,
+//		NULL);
+//
+//	if (hFile == INVALID_HANDLE_VALUE)
+//	{
+//		//fmt::print("Error: Could not open file\n");
+//		return false;
+//	}
+//
+//	//std::cout << "got handle\n";
+//
+//	// Map our executable to memory
+//	//
+//	hMapObject = CreateFileMapping(
+//		hFile,
+//		NULL,
+//		PAGE_READONLY,
+//		0, 0, NULL);
+//
+//	if (!hMapObject) return false;
+//
+//	// Get the base address of executable
+//	//
+//	lpBase = MapViewOfFile(
+//		hMapObject,
+//		FILE_MAP_READ,
+//		0, 0, 0);
+//
+//	if (!lpBase) return false;
+//
+//	// Get the base address of our DOS Header
+//	//
+//	dosHeader = (PIMAGE_DOS_HEADER)lpBase;
+//
+//	// Check for valid MZ Signature (0x54AD)
+//	//
+//	return(dosHeader->e_magic == IMAGE_DOS_SIGNATURE);
+//}
 
 void Scanner::ScanFile(const fs::path& filePath) 
 {

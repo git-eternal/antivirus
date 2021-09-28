@@ -3,6 +3,33 @@
 #include "../globals.hpp"
 #include "singleton.hpp"
 
+// For testing at the moment
+//
+class Timer
+{
+private:
+  // Type aliases to make accessing nested type easier
+  using clock_type = std::chrono::steady_clock;
+  using second_type = std::chrono::duration<double, std::ratio<1> >;
+
+  std::chrono::time_point<clock_type> m_beg;
+
+public:
+  Timer() : m_beg{ clock_type::now() }
+  {
+  }
+
+  void reset()
+  {
+    m_beg = clock_type::now();
+  }
+
+  double elapsed() const
+  {
+    return std::chrono::duration_cast<second_type>(clock_type::now() - m_beg).count();
+  }
+};
+
 class Scanner : public Singleton<Scanner>
 {
 private:
@@ -31,10 +58,12 @@ private:
 
 public:
   void ScanSystem();
-  bool IsExecutableFile(const std::string& path);
+  void QuarantineFile(const fs::path& path);
+  //bool IsExecutableFile(const std::string& path);
   void ScanFile(const fs::path& filePath);
   void ScanDrivers();
-  void ShowReport() const;
-  path_t GetFiles(const fs::path& path);
+  void Report() const;
+  bool IsPeFile(const std::string_view& path);
+  path_t GetAllFiles(const std::string& path);
   unsigned int ExecuteYara(const std::string& command) const;
 };
