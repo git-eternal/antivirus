@@ -11,5 +11,7 @@ int main(void)
 
   Scanner::GetInstance().ScanSystem();
 
+	Scanner::GetInstance().Report();
+
   std::cin.get();
 }

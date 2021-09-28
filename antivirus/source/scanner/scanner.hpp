@@ -30,6 +30,16 @@ public:
   }
 };
 
+class SafeThread : public std::vector<std::thread>
+{
+public:
+  ~SafeThread()
+  {
+    for (auto& thread : *this)
+      thread.join();
+  }
+};
+
 class Scanner : public Singleton<Scanner>
 {
 private:
@@ -60,7 +70,7 @@ public:
   void ScanSystem();
   void QuarantineFile(const fs::path& path);
   //bool IsExecutableFile(const std::string& path);
-  void ScanFile(const fs::path& filePath);
+  void ScanFile(const std::string& filePath);
   void ScanDrivers();
   void Report() const;
   bool IsPeFile(const std::string_view& path);

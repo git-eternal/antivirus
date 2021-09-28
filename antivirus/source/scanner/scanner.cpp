@@ -75,17 +75,20 @@ void Scanner::ScanSystem()
 {	
 	Timer t{};
 
-	const path_t files = GetAllFiles("C:/Users");
-
-	//std::for_each(std::execution::par_unseq, files.begin(),
-	//	files.end(), [](const auto& file)
-	//	{ 
-	//		fmt::print("path: {}\n", file);
-	//	});
+	const path_t files = GetAllFiles("C:/Users/admin/desktop");
 
 	fmt::print("\n{}/{} were valid PE files\n", files.size(), mFilesScanned);
 
 	fmt::print("Time elapsed: {}\n", t.elapsed());
+
+	SafeThread threads{};
+
+	std::for_each(std::execution::par_unseq, files.begin(),
+		files.end(), [&](const auto& file)
+	{ 
+		threads.emplace_back(
+			std::thread(&Scanner::ScanFile, this, file));
+	});
 }
 
 void Scanner::QuarantineFile(const fs::path& path)
@@ -152,14 +155,17 @@ void Scanner::QuarantineFile(const fs::path& path)
 //	return(dosHeader->e_magic == IMAGE_DOS_SIGNATURE);
 //}
 
-void Scanner::ScanFile(const fs::path& filePath) 
+void Scanner::ScanFile(const std::string& filePath) 
 {
 	if (!fs::exists(filePath))
 		return;
 
 	// TODO: Add support for fast scan (-f)
 	//
-	unsigned int scanResult = ExecuteYara("yara32.exe -c rule.yar " + filePath.string());
+	unsigned int scanResult = ExecuteYara("yara32.exe -c rule.yar " + filePath);
+
+	//std::cout << "path: " << filePath << " ";
+	//std::cout << "RESULT: " << scanResult << '\n';
 
 	if (scanResult >= 1)
 	{
